@@ -9,11 +9,21 @@ struct node
     struct node *left;
     struct node *right;
 }*root;
+
+node* getnewnode(int data)
+{
+	node* newnode=new node;
+	newnode->info=data;
+	newnode->left=NULL;
+	newnode->right=NULL;
+	
+	return newnode;
+}
  
 class BST
 {
     public:
-        void insert(node *, node *);
+        node* insert(node *, int);
         void postorder(node *);
         void inOrder(node *);
         void display(node *, int);
@@ -28,7 +38,7 @@ class BST
 
 int main()
 {
-    int choice, num,key;
+    int choice, num, key, size;
     BST bst;
     node *temp;
     while (1)
@@ -50,9 +60,15 @@ int main()
         {
         case 1:
             temp = new node;
-            cout<<"Enter the number to be inserted : ";
+            cout<<"Enter the number of elements to be inserted : ";
+            cin>>size;
+            cout<<"\nEnter the elements\n";
+            while(size--)
+            {
+            cout<<"    ";
             cin>>temp->info;
-            bst.insert(root, temp);
+            root=bst.insert(root, temp->info);
+            }
             break;
         case 2:
             cout<<"Postorder Traversal of BST:"<<endl;
@@ -102,52 +118,18 @@ int main()
 /*
  * Inserting Element into the Tree
  */
-void BST::insert(node *tree, node *newnode)
+node* BST::insert(node *root, int data)
 {
-    if (root == NULL)
-    {
-        root = new node;
-        root->info = newnode->info;
-        root->left = NULL;
-        root->right = NULL;
-        cout<<"Root Node is Added"<<endl;
-        return;
-    }
-    if (tree->info == newnode->info)
-    {
-        cout<<"Element already in the tree"<<endl;
-        return;
-    }
-    if (tree->info > newnode->info)
-    {
-        if (tree->left != NULL)
-        {
-            insert(tree->left, newnode);
-        }
-        else
-        {
-            tree->left = newnode;
-            (tree->left)->left = NULL;
-            (tree->left)->right = NULL;
-            cout<<"Node Added To Left"<<endl;
-            return;
-        }
-    }
-    else
-    {
-        if (tree->right != NULL)
-        {
-            insert(tree->right, newnode);
-        }
-        else
-        {
-            tree->right = newnode;
-            (tree->right)->left = NULL;
-            (tree->right)->right = NULL;
-            cout<<"Node Added To Right"<<endl;
-            return;
-        }
-    }
+	if(root==NULL)
+	root=getnewnode(data);
+	else
+	if(data<=root->info)
+	root->left=insert(root->left,data);
+	else
+	root->right=insert(root->right,data);
+	
+	return root;
+    
 }
  
 /*
